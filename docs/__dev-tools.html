@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>OrangeAdmin · 开发者自救工具</title>
+    <style>
+      :root { color-scheme: light dark; }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f5f7fa;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        color: #303133;
+      }
+      .card {
+        width: 560px;
+        max-width: calc(100vw - 32px);
+        background: #fff;
+        border-radius: 12px;
+        padding: 28px 28px 24px;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+      }
+      h1 { margin: 0 0 8px; font-size: 20px; color: #fa8c16; }
+      .sub { font-size: 13px; color: #909399; margin-bottom: 20px; line-height: 1.6; }
+      .row { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; }
+      .btn {
+        display: inline-block;
+        padding: 10px 18px;
+        font-size: 14px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        background: #fa8c16;
+        color: #fff;
+        transition: opacity 0.2s;
+      }
+      .btn:hover { opacity: 0.9; }
+      .btn.secondary { background: #909399; }
+      .btn.danger { background: #f56c6c; }
+      .btn.success { background: #67c23a; }
+      .btn.primary { background: #409eff; }
+      .log {
+        margin-top: 16px;
+        padding: 12px;
+        border-radius: 6px;
+        background: #f5f7fa;
+        font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+        font-size: 12px;
+        color: #606266;
+        line-height: 1.7;
+        max-height: 280px;
+        overflow: auto;
+        white-space: pre-wrap;
+        word-break: break-all;
+      }
+      .log .ok { color: #67c23a; }
+      .log .warn { color: #e6a23c; }
+      .log .err { color: #f56c6c; }
+      .tip {
+        margin-top: 14px;
+        padding: 10px 12px;
+        border-left: 3px solid #fa8c16;
+        background: #fff7e6;
+        font-size: 12px;
+        color: #ad6800;
+        line-height: 1.6;
+      }
+      code { background: #f0f0f0; padding: 1px 4px; border-radius: 3px; }
+      .probe {
+        margin-top: 14px;
+        padding: 10px 12px;
+        border-radius: 6px;
+        background: #ecf5ff;
+        font-size: 12px;
+        color: #303133;
+        line-height: 1.7;
+      }
+      .probe b { color: #fa8c16; }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>🛠 OrangeAdmin · 开发者自救工具</h1>
+      <div class="sub">
+        登录即 404 / 侧边栏空白，大多是 <code>localStorage</code> 里 <code>orange-admin-*</code>
+        残留脏数据，或浏览器 BFcache / SW 缓存。下面按钮按「温和 → 彻底」排列。
+      </div>
+
+      <div class="probe" id="probe">
+        <div>正在探活 dev server…</div>
+      </div>
+
+      <div class="row">
+        <button id="btnScan" class="btn secondary">🔍 扫一眼现状</button>
+        <button id="btnClean" class="btn">🧹 清空业务数据（保留登录）</button>
+        <button id="btnReset" class="btn danger">🔄 彻底重置（退登录）</button>
+      </div>
+
+      <div class="row">
+        <button id="btnHard" class="btn success">🚀 硬进系统（清缓存+强制刷新）</button>
+        <button id="btnNewTab" class="btn primary">🪟 新标签页打开（带 ?_t 防缓存）</button>
+      </div>
+
+      <div class="row">
+        <button id="btnDiag" class="btn primary">🩺 一键诊断（打印到 console）</button>
+      </div>
+
+      <div class="tip">
+        <b>用法</b>：最简单的路径 — 点 <b>🪟 新标签页打开</b>，浏览器会开一个全新标签页，
+        URL 带 <code>?_t=...</code> 时间戳，绕过所有 BFcache / SW / HMR 残留，直接进干净状态。
+        如果仍 404，请把 F12 Console 的红色报错截给小柚。
+      </div>
+
+      <pre id="log" class="log">等待操作…</pre>
+    </div>
+
+    <script>
+      ;(() => {
+        const log = document.getElementById('log')
+        const probeEl = document.getElementById('probe')
+        const KEEP_KEY = 'orange-admin-token'
+        const TARGET_PREFIX = 'orange-admin-'
+        const out = (msg, cls = '') => {
+          const span = document.createElement('div')
+          if (cls) span.className = cls
+          span.textContent = '› ' + msg
+          log.appendChild(span)
+          log.scrollTop = log.scrollHeight
+        }
+
+        function listOrangeKeys() {
+          const keys = []
+          for (let i = 0; i < localStorage.length; i++) {
+            const k = localStorage.key(i)
+            if (k && k.startsWith(TARGET_PREFIX)) keys.push(k)
+          }
+          return keys.sort()
+        }
+
+        function scan() {
+          log.innerHTML = ''
+          out('扫描 localStorage（作用域：' + location.origin + '）', '')
+          const keys = listOrangeKeys()
+          const hasToken = keys.includes(KEEP_KEY)
+          if (keys.length === 0) {
+            out('✅ 没有 orange-admin-* 数据，干净状态', 'ok')
+            return
+          }
+          keys.forEach((k) => {
+            let size = '?'
+            try {
+              const v = localStorage.getItem(k) || ''
+              size = (v.length / 1024).toFixed(2) + ' KB'
+            } catch (_) {}
+            const keep = k === KEEP_KEY
+            out((keep ? '[登录态·保留] ' : '[将删] ') + k + '  ·  ' + size, keep ? 'warn' : '')
+          })
+          out('登录态 token 当前：' + (hasToken ? '存在（已登录）' : '不存在（未登录）'), hasToken ? 'warn' : 'ok')
+        }
+
+        // 清 SW / cache storage
+        async function killCaches() {
+          out('清理浏览器缓存中…', '')
+          try {
+            if ('serviceWorker' in navigator) {
+              const regs = await navigator.serviceWorker.getRegistrations()
+              for (const r of regs) {
+                try { await r.unregister(); out('已注销 SW: ' + r.scope, 'ok') } catch (_) {}
+              }
+            }
+          } catch (_) {}
+          try {
+            if ('caches' in window) {
+              const keys = await caches.keys()
+              for (const k of keys) {
+                try { await caches.delete(k); out('已清缓存: ' + k, 'ok') } catch (_) {}
+              }
+            }
+          } catch (_) {}
+        }
+
+        function clean(keepToken) {
+          log.innerHTML = ''
+          out('开始清理（keepToken=' + keepToken + '）…', '')
+          const keys = listOrangeKeys()
+          let removed = 0
+          let kept = 0
+          keys.forEach((k) => {
+            if (keepToken && k === KEEP_KEY) {
+              kept++
+              out('[保留] ' + k, 'warn')
+              return
+            }
+            try {
+              localStorage.removeItem(k)
+              removed++
+              out('[已删] ' + k, 'ok')
+            } catch (e) {
+              out('[失败] ' + k + ' · ' + (e && e.message ? e.message : e), 'err')
+            }
+          })
+          out('—— 完成：删除 ' + removed + ' 个，保留 ' + kept + ' 个 ——', removed ? 'ok' : 'warn')
+        }
+
+        // 硬进系统（当前标签页）
+        async function hardEnter() {
+          clean(true)
+          await killCaches()
+          try { sessionStorage.clear() } catch (_) {}
+          const token = localStorage.getItem(KEEP_KEY)
+          const target = token ? ('/dashboard?_t=' + Date.now()) : ('/login?_t=' + Date.now())
+          out('正在硬进系统（强制 reload，绕过所有缓存）…', 'warn')
+          // 用 location.assign + 立刻 reload 强制 vite 重新编译
+          location.assign(target)
+          setTimeout(() => location.reload(), 80)
+        }
+
+        // 新标签页打开（最强力 — 完全新的 BrowserContext-like 流程）
+        function newTab() {
+          const token = localStorage.getItem(KEEP_KEY)
+          const target = token ? ('/dashboard?_t=' + Date.now()) : ('/login?_t=' + Date.now())
+          out('正在新标签页打开 ' + target + ' …', 'warn')
+          // 先清 SW/cache，再新标签打开
+          killCaches().then(() => {
+            const w = window.open(target, '_blank')
+            if (!w) out('弹窗被拦截，请允许此站点弹窗或手动 Ctrl+Click', 'err')
+            else out('已开新标签，请切到新标签页完成登录', 'ok')
+          })
+        }
+
+        document.getElementById('btnScan').addEventListener('click', scan)
+        document.getElementById('btnClean').addEventListener('click', () => clean(true))
+        document.getElementById('btnReset').addEventListener('click', () => clean(false))
+        document.getElementById('btnHard').addEventListener('click', hardEnter)
+        document.getElementById('btnNewTab').addEventListener('click', newTab)
+        document.getElementById('btnDiag').addEventListener('click', diagnose)
+
+        // 一键诊断：拼装一次 dump 调用，把所有可疑状态打到 console 与本页 log
+        async function diagnose() {
+          log.innerHTML = ''
+          out('准备诊断…', 'warn')
+          // 在新标签页打开带探针的 app（同源），避免当前页没加载 app
+          try {
+            const w = window.open('/?_diag=' + Date.now(), '_blank')
+            if (!w) { out('弹窗被拦截，请手动允许后重试', 'err'); return }
+            // 等 1.5s 让 app 挂载，再打探针
+            await new Promise(r => setTimeout(r, 1800))
+            try {
+              const dump = w.eval(`(() => {
+                const ls = Object.fromEntries(Object.keys(localStorage).filter(k => k.startsWith('orange-admin-')).map(k => [k, (localStorage.getItem(k) || '').slice(0, 240)]));
+                const r = (window).__router__;
+                const routes = r ? r.getRoutes().map(x => ({name: x.name, path: x.path})) : null;
+                const matched = r ? r.resolve('/dashboard') : null;
+                let menuStoreMenus = null;
+                try {
+                  const all = (window).__pinia__._s;
+                  const ms = all.get('menu');
+                  menuStoreMenus = ms ? ms.menus.map(m => ({id: m.id, path: m.path, name: m.name, perm: m.permission})).slice(0, 15) : 'no-menu-store';
+                } catch (e) { menuStoreMenus = 'err:' + e.message; }
+                return JSON.stringify({
+                  routes_total: routes ? routes.length : null,
+                  routes_sample: routes ? routes.slice(0, 8) : null,
+                  dashboard_route: routes ? routes.find(x => x.path === '/dashboard') || 'NOT FOUND' : null,
+                  dashboard_resolve: matched ? { matched_count: matched.matched.length, comp_names: matched.matched.map(m => (m.components?.default?.name || '?')) } : null,
+                  ls_keys: Object.keys(ls),
+                  ls_token: (ls['orange-admin-token'] || '').slice(0, 40),
+                  menu_store_count: Array.isArray(menuStoreMenus) ? menuStoreMenus.length : null,
+                  menu_store_items: menuStoreMenus
+                }, null, 2);
+              })()`)
+              out('诊断开始（同时已打印到新标签页 console）…', '')
+              out(dump, '')
+              // 同时写到新标签页 console（更详细，可拷贝）
+              try { w.console.log('===== ORANGE-ADMIN DIAG =====\\n' + dump + '\\n===== END =====') } catch (_) {}
+            } catch (e) {
+              out('eval 失败：' + (e.message || e) + '。请改用页面 Console 手贴脚本', 'err')
+            }
+          } catch (e) {
+            out('弹窗失败：' + (e.message || e), 'err')
+          }
+        }
+
+        // 自动探活 dev server（注意：浏览器 fetch 不走 axios adapter，不能用 /api/* 来验 mock）
+        ;(async () => {
+          try {
+            const r = await fetch('/?_t=' + Date.now(), { cache: 'no-store' })
+            const txt = await r.text()
+            // 用是否包含 <div id="app"> 判断 SPA 入口是否健康
+            const ok = r.ok && /<div id="app">/.test(txt)
+            probeEl.innerHTML = ok
+              ? '<div><b>dev server</b>：✅ 健康（HTTP ' + r.status + '，SPA 入口返回正常）</div><div style="margin-top:6px;color:#909399">mock 数据由 <code>utils/request.ts</code> 的 axios adapter 拦截（DevTools → Network 看 <code>/api/...</code> 是 200 但 <code>Status: (from service worker)</code> 或 <code>(from disk cache)</code> 都没问题，关键是主 chunk 200 + 体积正常）</div>'
+              : '<div><b>dev server</b>：⚠️ HTTP ' + r.status + ' 但 SPA 入口不正常</div><div style="margin-top:6px;color:#909399">响应体长度：' + txt.length + ' 字节</div>'
+          } catch (e) {
+            probeEl.innerHTML = '<div><b>dev server</b>：❌ 无法连接：' + (e && e.message ? e.message : e) + '</div>'
+          }
+        })()
+
+        scan()
+      })()
+    </script>
+  </body>
+</html>
