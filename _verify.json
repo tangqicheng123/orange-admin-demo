@@ -1,0 +1,50 @@
+[
+  {
+    "name": "LICENSE",
+    "path": "LICENSE",
+    "sha": "edc6a216d43652976f94fd368c12cc33fd386d53",
+    "size": 1055,
+    "url": "https://api.github.com/repos/tangqicheng123/orange-admin-demo/contents/LICENSE?ref=master",
+    "html_url": "https://github.com/tangqicheng123/orange-admin-demo/blob/master/LICENSE",
+    "git_url": "https://api.github.com/repos/tangqicheng123/orange-admin-demo/git/blobs/edc6a216d43652976f94fd368c12cc33fd386d53",
+    "download_url": "https://raw.githubusercontent.com/tangqicheng123/orange-admin-demo/master/LICENSE",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/tangqicheng123/orange-admin-demo/contents/LICENSE?ref=master",
+      "git": "https://api.github.com/repos/tangqicheng123/orange-admin-demo/git/blobs/edc6a216d43652976f94fd368c12cc33fd386d53",
+      "html": "https://github.com/tangqicheng123/orange-admin-demo/blob/master/LICENSE"
+    }
+  },
+  {
+    "name": "README.md",
+    "path": "README.md",
+    "sha": "80891a57986711b47d19dafb9460967953aaa84a",
+    "size": 3924,
+    "url": "https://api.github.com/repos/tangqicheng123/orange-admin-demo/contents/README.md?ref=master",
+    "html_url": "https://github.com/tangqicheng123/orange-admin-demo/blob/master/README.md",
+    "git_url": "https://api.github.com/repos/tangqicheng123/orange-admin-demo/git/blobs/80891a57986711b47d19dafb9460967953aaa84a",
+    "download_url": "https://raw.githubusercontent.com/tangqicheng123/orange-admin-demo/master/README.md",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/tangqicheng123/orange-admin-demo/contents/README.md?ref=master",
+      "git": "https://api.github.com/repos/tangqicheng123/orange-admin-demo/git/blobs/80891a57986711b47d19dafb9460967953aaa84a",
+      "html": "https://github.com/tangqicheng123/orange-admin-demo/blob/master/README.md"
+    }
+  },
+  {
+    "name": "assets",
+    "path": "assets",
+    "sha": "1b87ea88899f23b72f87680cec5c99f09895ae88",
+    "size": 0,
+    "url": "https://api.github.com/repos/tangqicheng123/orange-admin-demo/contents/assets?ref=master",
+    "html_url": "https://github.com/tangqicheng123/orange-admin-demo/tree/master/assets",
+    "git_url": "https://api.github.com/repos/tangqicheng123/orange-admin-demo/git/trees/1b87ea88899f23b72f87680cec5c99f09895ae88",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/tangqicheng123/orange-admin-demo/contents/assets?ref=master",
+      "git": "https://api.github.com/repos/tangqicheng123/orange-admin-demo/git/trees/1b87ea88899f23b72f87680cec5c99f09895ae88",
+      "html": "https://github.com/tangqicheng123/orange-admin-demo/tree/master/assets"
+    }
+  }
+]
