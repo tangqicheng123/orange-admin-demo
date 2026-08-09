@@ -1,0 +1,1 @@
+import{cb as e,b9 as t}from"./index-CKoZEgGV.js";const r="update:modelValue",s="change",o="input";function i(){if(!arguments.length)return[];var a=arguments[0];return e(a)?a:[a]}const c=a=>t?window.requestAnimationFrame(a):setTimeout(a,16),u=a=>t?window.cancelAnimationFrame(a):clearTimeout(a);export{s as C,o as I,r as U,i as a,u as c,c as r};
