@@ -15,6 +15,7 @@
   <img src="https://img.shields.io/badge/Theme-%E6%9A%97%E9%BB%91%2F%E4%BA%AE%E8%89%B2-orange" alt="theme"/>
   <img src="https://img.shields.io/badge/Mobile-%E5%93%8D%E5%BA%94%E5%BC%8F-brightgreen" alt="mobile"/>
   <img src="https://img.shields.io/badge/License-%E5%95%86%E4%B8%9A%E6%8E%88%E6%9D%83-red" alt="license"/>
+  <img src="https://img.shields.io/badge/Version-v1.0.0-blue" alt="version"/>
 </p>
 
 <p align="center">
@@ -104,6 +105,23 @@
 - 🐙 GitHub：暂未开源完整源码，可加微信交流
 
 购买后你将获得：完整源码仓库、Mock 数据、部署文档与对应档位的技术支持。
+
+## 📘 文档与快速开始
+
+- **在线文档**：Demo 内「帮助中心 → 开发文档」含快速开始、目录结构、主题、i18n、RBAC、Mock、部署说明（进 Demo 后左上角菜单打开）。
+- **免费社区版源码**：[orange-admin-community](https://github.com/tangqicheng123/orange-admin-community) —— clone 即跑，仅限学习/评估，**禁商用**。
+- **社区版快速开始**：
+  ```bash
+  npm install --legacy-peer-deps
+  npm run dev   # 任意用户名 + 密码 123456 登录
+  ```
+
+## 🛟 支持与更新承诺
+
+- **响应时效**：邮件 / 微信咨询 **1–2 个工作日内**回复。
+- **版本化更新**：Pro 持续迭代，版本化发布（当前 **v1.0.0**），历史变更见 `CHANGELOG.md`。
+- **覆盖范围**：对应档位的技术支持 + 后续版本更新；定制开发另议。
+- **授权保障**：商业版附《商业授权书》与去版权标识，可合法将后台交付给客户项目。
 
 ## ⚠️ 版权声明
 
