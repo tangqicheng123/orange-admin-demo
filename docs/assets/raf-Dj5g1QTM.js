@@ -1,1 +1,0 @@
-import{bN as t,bc as a}from"./index-YBrKp19p.js";function n(){if(!arguments.length)return[];var r=arguments[0];return t(r)?r:[r]}const i=r=>a?window.requestAnimationFrame(r):setTimeout(r,16),s=r=>a?window.cancelAnimationFrame(r):clearTimeout(r);export{n as a,s as c,i as r};
