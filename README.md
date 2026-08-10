@@ -19,16 +19,16 @@
 </p>
 
 <p align="center">
-  <a href="https://tangqicheng123.github.io/orange-admin-demo/" target="_blank">
+  <a href="https://tqc-dev.github.io/orange-admin-demo/" target="_blank">
     <img src="https://img.shields.io/badge/🚀%20在线%20Demo-立即体验-orange?style=for-the-badge" alt="live demo"/>
   </a>
   &nbsp;
-  <a href="https://github.com/tangqicheng123/orange-admin-demo" target="_blank">
+  <a href="https://github.com/tqc-dev/orange-admin-demo" target="_blank">
     <img src="https://img.shields.io/badge/⭐%20GitHub-收藏蓝-?style=for-the-badge&logo=github" alt="github"/>
   </a>
 </p>
 
-> 🌐 **在线 Demo**：[https://tangqicheng123.github.io/orange-admin-demo/](https://tangqicheng123.github.io/orange-admin-demo/) —— 免安装，点开即玩；**用户名任意填写，密码统一为 `123456`** 即可登录（Mock 数据）。
+> 🌐 **在线 Demo**：[https://tqc-dev.github.io/orange-admin-demo/](https://tqc-dev.github.io/orange-admin-demo/) —— 免安装，点开即玩；**用户名任意填写，密码统一为 `123456`** 即可登录（Mock 数据）。
 
 ## 🎯 这套模板适合谁
 
@@ -109,7 +109,7 @@
 ## 📘 文档与快速开始
 
 - **在线文档**：Demo 内「帮助中心 → 开发文档」含快速开始、目录结构、主题、i18n、RBAC、Mock、部署说明（进 Demo 后左上角菜单打开）。
-- **免费社区版源码**：[orange-admin-community](https://github.com/tangqicheng123/orange-admin-community) —— clone 即跑，仅限学习/评估，**禁商用**。
+- **免费社区版源码**：[orange-admin-community](https://github.com/tqc-dev/orange-admin-community) —— clone 即跑，仅限学习/评估，**禁商用**。
 - **社区版快速开始**：
   ```bash
   npm install --legacy-peer-deps
