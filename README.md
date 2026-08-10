@@ -15,7 +15,7 @@
   <img src="https://img.shields.io/badge/Theme-%E6%9A%97%E9%BB%91%2F%E4%BA%AE%E8%89%B2-orange" alt="theme"/>
   <img src="https://img.shields.io/badge/Mobile-%E5%93%8D%E5%BA%94%E5%BC%8F-brightgreen" alt="mobile"/>
   <img src="https://img.shields.io/badge/License-%E5%95%86%E4%B8%9A%E6%8E%88%E6%9D%83-red" alt="license"/>
-  <img src="https://img.shields.io/badge/Version-v1.0.0-blue" alt="version"/>
+  <img src="https://img.shields.io/badge/Version-v1.0.2-blue" alt="version"/>
 </p>
 
 <p align="center">

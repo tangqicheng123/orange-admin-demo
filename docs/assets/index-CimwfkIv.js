@@ -1,0 +1,1 @@
+import{d as s,ak as r,c,m as p,n as u,o as m}from"./index-YBrKp19p.js";const f=s({__name:"index",setup(_){const o=p(),a=u();return r(()=>{const{params:e,query:t}=o,n=e.path||"";a.replace({path:"/"+n,query:t})}),(e,t)=>(m(),c("div"))}});export{f as default};
