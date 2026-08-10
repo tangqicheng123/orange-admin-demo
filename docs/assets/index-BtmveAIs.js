@@ -1,0 +1,1 @@
+import{bp as a,q as i}from"./vue-vendor-DB5e1Y5f.js";const t=i({ariaLabel:String,ariaOrientation:{type:String,values:["horizontal","vertical","undefined"]},ariaControls:String}),n=r=>a(t,r);export{n as u};
