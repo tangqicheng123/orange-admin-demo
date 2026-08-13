@@ -1,16 +1,336 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/orange-admin-demo/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="OrangeAdmin 橙枢 —— 基于 Vue3 + TypeScript + Element Plus 的可售卖后台管理模板" />
-    <title>OrangeAdmin 橙枢 · 后台管理模板</title>
-    <script type="module" crossorigin src="/orange-admin-demo/assets/index-CprA2aqv.js"></script>
-    <link rel="modulepreload" crossorigin href="/orange-admin-demo/assets/vue-vendor-D4vMNx38.js">
-    <link rel="stylesheet" crossorigin href="/orange-admin-demo/assets/index-BFxiywFT.css">
-  </head>
-  <body>
-    <div id="app"></div>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/orange-admin-demo/favicon.svg" />
+  <title>OrangeAdmin 橙枢 · 开箱即用的 Vue3 中后台模板</title>
+  <style>
+    :root {
+      --orange: #ff7a18;
+      --orange-dark: #e8620a;
+      --orange-soft: #fff3e8;
+      --ink: #1d2129;
+      --ink-2: #4e5969;
+      --ink-3: #86909c;
+      --line: #ececf0;
+      --bg: #ffffff;
+      --bg-soft: #fafafa;
+      --radius: 16px;
+      --shadow: 0 8px 30px rgba(255, 122, 24, 0.10);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+    /* Nav */
+    header.nav {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: saturate(180%) blur(12px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; }
+    .logo .dot {
+      width: 28px; height: 28px; border-radius: 8px;
+      background: linear-gradient(135deg, var(--orange), #ffae42);
+      display: grid; place-items: center; color: #fff; font-weight: 800;
+    }
+    .nav-links { display: flex; gap: 28px; font-size: 14px; color: var(--ink-2); }
+    .nav-links a:hover { color: var(--orange); }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 11px 22px; border-radius: 999px; font-weight: 600; font-size: 15px;
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+    .btn-primary { background: var(--orange); color: #fff; box-shadow: var(--shadow); }
+    .btn-primary:hover { transform: translateY(-2px); }
+    .btn-ghost { border: 1px solid var(--line); color: var(--ink); }
+    .btn-ghost:hover { border-color: var(--orange); color: var(--orange); }
+
+    /* Hero */
+    .hero { text-align: center; padding: 84px 0 64px; background: radial-gradient(120% 80% at 50% -10%, var(--orange-soft), #fff 60%); }
+    .tag {
+      display: inline-block; padding: 5px 14px; border-radius: 999px;
+      background: #fff; border: 1px solid var(--line); color: var(--orange-dark);
+      font-size: 13px; font-weight: 600; margin-bottom: 20px;
+    }
+    .hero h1 { font-size: 46px; line-height: 1.2; letter-spacing: -0.5px; }
+    .hero h1 .accent { color: var(--orange); }
+    .hero p.sub { font-size: 18px; color: var(--ink-2); margin: 18px auto 0; max-width: 680px; }
+    .hero-cta { margin-top: 34px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+    /* Features */
+    section.block { padding: 72px 0; }
+    .section-head { text-align: center; margin-bottom: 44px; }
+    .section-head h2 { font-size: 30px; }
+    .section-head p { color: var(--ink-3); margin-top: 10px; }
+    .feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .feat {
+      background: var(--bg-soft); border: 1px solid var(--line); border-radius: var(--radius);
+      padding: 26px; transition: transform .15s ease, box-shadow .15s ease;
+    }
+    .feat:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+    .feat .ico {
+      width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center;
+      background: var(--orange-soft); color: var(--orange); font-size: 22px; margin-bottom: 14px;
+    }
+    .feat h3 { font-size: 17px; margin-bottom: 6px; }
+    .feat p { color: var(--ink-2); font-size: 14px; }
+
+    /* Pricing */
+    .pricing { background: var(--bg-soft); }
+    .price-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; align-items: stretch; }
+    .plan {
+      background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
+      padding: 30px 26px; display: flex; flex-direction: column;
+    }
+    .plan.recommend { border: 2px solid var(--orange); box-shadow: var(--shadow); position: relative; }
+    .plan .badge {
+      position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+      background: var(--orange); color: #fff; font-size: 12px; font-weight: 700;
+      padding: 4px 14px; border-radius: 999px;
+    }
+    .plan h3 { font-size: 19px; }
+    .plan .desc { color: var(--ink-3); font-size: 13px; margin: 6px 0 18px; min-height: 38px; }
+    .plan .price { font-size: 34px; font-weight: 800; }
+    .plan .price small { font-size: 14px; font-weight: 500; color: var(--ink-3); }
+    .plan ul { list-style: none; margin: 20px 0 26px; flex: 1; }
+    .plan li { font-size: 14px; color: var(--ink-2); padding: 7px 0; border-bottom: 1px dashed var(--line); display: flex; gap: 8px; }
+    .plan li::before { content: "✓"; color: var(--orange); font-weight: 700; }
+    .plan .btn { width: 100%; }
+
+    /* Compliance */
+    .badges { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+    .badge-item {
+      text-align: center; padding: 24px 16px; border: 1px solid var(--line);
+      border-radius: var(--radius); background: #fff;
+    }
+    .badge-item .big { font-size: 30px; }
+    .badge-item h4 { margin: 10px 0 4px; font-size: 15px; }
+    .badge-item p { color: var(--ink-3); font-size: 13px; }
+
+    /* Footer */
+    footer { background: #1d2129; color: #c9cdd4; padding: 48px 0 30px; }
+    .foot-inner { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 24px; }
+    .foot-inner h4 { color: #fff; margin-bottom: 12px; font-size: 15px; }
+    .foot-inner a { color: #c9cdd4; font-size: 14px; display: block; padding: 4px 0; }
+    .foot-inner a:hover { color: var(--orange); }
+    .copyright { text-align: center; margin-top: 30px; font-size: 13px; color: #86909c; }
+
+    @media (max-width: 880px) {
+      .feat-grid, .price-grid, .badges { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 34px; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Nav -->
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <div class="logo"><span class="dot">橙</span> OrangeAdmin 橙枢</div>
+      <nav class="nav-links">
+        <a href="#features">功能特性</a>
+        <a href="#pricing">授权定价</a>
+        <a href="#compliance">合规保障</a>
+        <a href="#buy">购买渠道</a>
+      </nav>
+      <a class="btn btn-primary" href="#pricing">立即购买</a>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="wrap">
+      <span class="tag">纯前端 + Mock · 合规可售 · 内置完整 RBAC</span>
+      <h1>开箱即用的 <span class="accent">Vue3</span> 中后台管理模板</h1>
+      <p class="sub">
+        OrangeAdmin（橙枢）是一套原创、合规、可售卖的后台管理模板。
+        基于 Vue3 + TypeScript + Element Plus，内置动态权限、组件演示与系统管理 CRUD，下载即可跑。
+      </p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="/orange-admin-demo/admin/" target="_blank" rel="noopener">查看在线 DEMO</a>
+        <a class="btn btn-ghost" href="#pricing">查看授权价格</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="block" id="features">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>为什么选择 OrangeAdmin</h2>
+        <p>一套模板，覆盖中后台最常见场景</p>
+      </div>
+      <div class="feat-grid">
+        <div class="feat">
+          <div class="ico">⚡</div>
+          <h3>现代技术栈</h3>
+          <p>Vue3.5 + TypeScript(strict) + Vite + Element Plus，按需引入，构建即用。</p>
+        </div>
+        <div class="feat">
+          <div class="ico">🔐</div>
+          <h3>完整 RBAC 权限</h3>
+          <p>动态菜单 + 按钮级权限指令 + 路由守卫，角色差异开箱演示。</p>
+        </div>
+        <div class="feat">
+          <div class="ico">🧩</div>
+          <h3>丰富组件演示</h3>
+          <p>仪表盘(ECharts)、复杂表格、表单校验、图表、上传等卖点展示。</p>
+        </div>
+        <div class="feat">
+          <div class="ico">🗂️</div>
+          <h3>系统管理 CRUD</h3>
+          <p>用户 / 角色 / 菜单 / 部门 / 字典全套，含分页、搜索、增删改查。</p>
+        </div>
+        <div class="feat">
+          <div class="ico">🎨</div>
+          <h3>主题与暗黑</h3>
+          <p>可折叠侧边栏、多标签页、主题色切换、暗黑模式一应俱全。</p>
+        </div>
+        <div class="feat">
+          <div class="ico">✅</div>
+          <h3>合规可售</h3>
+          <p>依赖全为 MIT / Apache-2.0，原创设计，附带分级商业授权。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="block pricing" id="pricing">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>分级买断授权</h2>
+        <p>一次购买，永久使用。按使用范围选择对应授权。</p>
+      </div>
+      <div class="price-grid">
+        <div class="plan">
+          <h3>社区版</h3>
+          <p class="desc">完整功能（含中英双语 / 电商 / CRM / 暗黑 / 响应式），禁商用，且不含 AI 行业版。先免费学、先试用。</p>
+          <div class="price">免费</div>
+          <ul>
+            <li>完整源码 + Mock</li>
+            <li>在线 DEMO 访问</li>
+            <li>README 与开发文档</li>
+            <li>不可商用 / 不可转售</li>
+          </ul>
+          <a class="btn btn-ghost" href="/orange-admin-demo/admin/">免费体验</a>
+        </div>
+
+        <div class="plan">
+          <h3>Lite 商用基础版</h3>
+          <p class="desc">＝ 社区版代码 + 解锁商用授权，不含 AI 行业版。真能交付客户的破冰档。</p>
+          <div class="price">¥99</div>
+          <ul>
+            <li>社区版全部权益</li>
+            <li>解锁商用授权</li>
+            <li>单个商业项目可用</li>
+            <li>模板本身不可转售</li>
+          </ul>
+          <a class="btn btn-ghost" href="mailto:1635409114@qq.com?subject=OrangeAdmin%20Lite%20%E8%B4%AD%E4%B9%B0%E5%92%A8%E8%AF%A2">购买 Lite</a>
+        </div>
+
+        <div class="plan recommend">
+          <span class="badge">最受欢迎</span>
+          <h3>商业版</h3>
+          <p class="desc">Lite + AI 行业版四页（API Key / 模型 / 日志 / 用量）+ 去版权 + 优先支持。接 AI 类外包直接当脚手架。</p>
+          <div class="price">¥399</div>
+          <ul>
+            <li>Lite 全部权益</li>
+            <li>AI 行业版四页</li>
+            <li>可去除版权信息</li>
+            <li>优先技术支持</li>
+          </ul>
+          <a class="btn btn-primary" href="mailto:1635409114@qq.com?subject=OrangeAdmin%20%E5%95%86%E4%B8%9A%E7%89%88%E8%B4%AD%E4%B9%B0%E5%92%A8%E8%AF%A2">购买商业版</a>
+        </div>
+
+        <div class="plan">
+          <h3>企业版</h3>
+          <p class="desc">商业版 + 多项目授权 + 优先支持 + 1 年内免费升级。适合团队 / 外包公司。</p>
+          <div class="price">¥1499</div>
+          <ul>
+            <li>商业版全部权益</li>
+            <li>多商业项目授权</li>
+            <li>可制作可转售产品</li>
+            <li>1 年内免费升级</li>
+          </ul>
+          <a class="btn btn-ghost" href="mailto:1635409114@qq.com?subject=OrangeAdmin%20%E4%BC%81%E4%B8%9A%E7%89%88%E8%B4%AD%E4%B9%B0%E5%92%A8%E8%AF%A2">购买企业版</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Compliance -->
+  <section class="block" id="compliance">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>合规保障</h2>
+        <p>售卖无忧，版权清晰</p>
+      </div>
+      <div class="badges">
+        <div class="badge-item">
+          <div class="big">🛡️</div>
+          <h4>零传染性协议</h4>
+          <p>依赖仅 MIT / Apache-2.0，无 GPL / AGPL</p>
+        </div>
+        <div class="badge-item">
+          <div class="big">🎨</div>
+          <h4>100% 原创</h4>
+          <p>代码、设计、文档均为原创</p>
+        </div>
+        <div class="badge-item">
+          <div class="big">📜</div>
+          <h4>分级授权</h4>
+          <p>个人 / 商业 / 扩展清晰界定</p>
+        </div>
+        <div class="badge-item">
+          <div class="big">📦</div>
+          <h4>文档齐全</h4>
+          <p>README + 二次开发指南 + 授权说明</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Buy / Footer -->
+  <footer id="buy">
+    <div class="wrap foot-inner">
+      <div>
+        <h4>OrangeAdmin 橙枢</h4>
+        <p style="max-width: 280px; font-size: 14px;">原创、合规、可售卖的 Vue3 中后台模板。</p>
+      </div>
+      <div>
+        <h4>购买渠道</h4>
+        <a href="mailto:1635409114@qq.com?subject=OrangeAdmin%20%E8%B4%AD%E4%B9%B0%E5%92%A8%E8%AF%A2">📧 邮箱购买 / 咨询</a>
+        <a href="mailto:1635409114@qq.com?subject=OrangeAdmin%20%E5%BE%AE%E4%BF%A1%E8%81%94%E7%B3%BB">💬 微信：tqc18537919248</a>
+        <a href="/orange-admin-demo/admin/">▶ 直接体验在线 DEMO</a>
+      </div>
+      <div>
+        <h4>资源</h4>
+        <a href="/orange-admin-demo/admin/">在线 DEMO</a>
+        <a href="/orange-admin-demo/README.md">使用文档</a>
+        <a href="/orange-admin-demo/LICENSE">授权协议</a>
+        <a href="/orange-admin-demo/THIRD-PARTY-LICENSES.md">第三方许可</a>
+      </div>
+      <div>
+        <h4>联系</h4>
+        <a href="mailto:1635409114@qq.com?subject=OrangeAdmin%20%E5%AE%9A%E5%88%B6%E5%BC%80%E5%8F%91">定制开发</a>
+        <a href="mailto:1635409114@qq.com?subject=OrangeAdmin%20%E4%BC%81%E4%B8%9A%E6%8E%88%E6%9D%83%E5%92%A8%E8%AF%A2">企业授权咨询</a>
+        <a href="mailto:1635409114@qq.com?subject=OrangeAdmin%20%E6%8A%80%E6%9C%AF%E6%94%AF%E6%8C%81">技术支持</a>
+      </div>
+    </div>
+    <div class="copyright">© 2026 唐少. OrangeAdmin（橙枢）保留一切权利. 商业授权详见 LICENSE.</div>
+  </footer>
+</body>
 </html>
